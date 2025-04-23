@@ -1,0 +1,29 @@
+# Node modules
+node_modules/
+
+# Environment config
+.env
+.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Database files (if using SQLite for development)
+*.sqlite
+*.sqlite3
+*.db
+
+# Compiled files
+dist/
+build/
+
+# System files
+.DS_Store
+
+# Editor settings
+.idea/
+.vscode/
