@@ -1,42 +1,20 @@
 import { Lock, Menu } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import SidebarItem from "./SidebarItem";
 
-const SidebarItem = ({ icon: Icon, label, active, onClick, activeColor , path }) => {
-  const navigate = useNavigate()
+export default function Sidebar({ items = [], colorTheme = {} }) {  
+  const [isOpen,setIsOpen] = useState(true)
 
-  const handleClick = () => {
-    onClick();
-    navigate(path);
+  const [activeIndex,setActiveIndex] = useState( () => {
+    const storedIndex = localStorage.getItem('sidebar-active-index');
+    return storedIndex ? parseInt(storedIndex,10) : 0;
+  });
+
+  const handleClick = (index) => {
+    setActiveIndex(index);
+    localStorage.setItem('sidebar-active-index',index.toString())
   }
 
-  return (
-    <div
-      onClick={handleClick}
-      className={`flex items-center gap-3 px-6 py-3 cursor-pointer rounded-md transition-all duration-300 ${
-        active
-          ? `${activeColor.bg} ${activeColor.text} font-semibold shadow-sm`
-          : "text-gray-600 hover:bg-gray-100 hover:text-black font-semibold"
-      }`}
-    >
-      <Icon className="w-5 h-5" />
-      <span className="whitespace-nowrap">{label}</span>
-    </div>
-)};
-
-export default function Sidebar({ items = [], colorTheme = {} }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isOpen, setIsOpen] = useState(true);
-  const location = useLocation();
-  const navigate = useNavigate()
-
-  // console.log(location.pathname);
-  useEffect( () => {
-    if(location.pathname !== "/"){
-      navigate("dashboard")
-    }
-  },[])
-  
   // Default color theme fallback
   const activeColor = {
     bg: colorTheme.bg || "bg-red-50",
@@ -70,9 +48,9 @@ export default function Sidebar({ items = [], colorTheme = {} }) {
               key={item.label}
               icon={item.icon}
               label={item.label}
-              active= {index === activeIndex}
+              active={index === activeIndex}
               activeColor={activeColor}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => handleClick(index)}
               path={item.path}
             />
           ))}
@@ -80,7 +58,9 @@ export default function Sidebar({ items = [], colorTheme = {} }) {
 
         <div className="p-4">
           <div
-            className={`${colorTheme.btnBg || "bg-red-600" } text-white flex items-center gap-3 px-6 py-3 cursor-pointer rounded-md font-semibold`}
+            className={`${
+              colorTheme.btnBg || "bg-red-600"
+            } text-white flex items-center gap-3 px-6 py-3 cursor-pointer rounded-md font-semibold`}
           >
             <Lock className="w-5 h-5" />
             <span className="whitespace-nowrap">Change Password</span>
