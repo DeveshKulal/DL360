@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); 
 const router = express.Router();
 const db = require('../config/db');
 
@@ -30,9 +30,11 @@ router.post('/login', async (req, res) => {
 
         const user = rows[0];
         if (password !== user.password) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({ message: 'Wrong password' });
         }
 
+        // req.session.user_id = user.user_id;
+        
         res.json({
             message: 'Login successful',
             user: {
@@ -46,10 +48,6 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong while login' });
     }
 });
-
-
-
-
 
 
 module.exports = router;

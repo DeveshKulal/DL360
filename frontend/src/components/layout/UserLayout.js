@@ -6,7 +6,7 @@ import UserSidebar from '../../pages/User/UserSidebar'
 function UserLayout() {
   return (
     <>
-      <div className='flex  min-h-screen'>
+      <div className='flex min-h-screen'>
         <div >
           <UserSidebar />
         </div>
