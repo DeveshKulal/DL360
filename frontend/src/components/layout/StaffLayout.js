@@ -1,14 +1,14 @@
 import React from 'react'
 import Header from '../dashboard/Header'
 import { Outlet } from 'react-router-dom'
-import UserSidebar from '../../pages/User/UserSidebar'
+import StaffSidebar from '../../pages/Staff/StaffSidebar'
 
-function UserLayout() {
+function StaffLayout() {
   return (
     <>
       <div className='flex h-screen'>
         <div >
-          <UserSidebar />
+          <StaffSidebar />
         </div>
         {/* Main Content */}
         <div className='flex-1 flex flex-col'>
@@ -26,4 +26,4 @@ function UserLayout() {
   )
 }
 
-export default UserLayout
+export default StaffLayout

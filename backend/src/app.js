@@ -6,6 +6,7 @@ require('dotenv').config();
 //! Routes
 const authRoutes = require('./routes/authRoutes')
 const userActionsRoutes = require('./routes/userActionsRoutes')
+const staffRoutes = require('./routes/staffRoutes')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 //! Routes are used Here
 app.use('/api/auth',authRoutes)
 app.use('/api/user',userActionsRoutes)
+app.use('/api/staff',staffRoutes)
 
 // ! Server
 const PORT = process.env.PORT || 3000;

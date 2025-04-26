@@ -11,8 +11,8 @@ import {
 
 export default function ApplyLlr() {
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="bg-white rounded-2xl shadow p-8 max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gray-100 p-6 ">
+      <div className="bg-white rounded-2xl shadow p-8 max-w-3xl mx-auto  ">
         <div className="mb-6">
           <h2 className="text-lg font-semibold">Personal Information</h2>
         </div>

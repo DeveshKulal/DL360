@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../config/db')
-// const util = require('util');
 
-// const dbQuery = util.promisify(db.query).bind(db);
+// !LLR number generation
 const generateLLRNumber = async (stateCode) => {
     const year = new Date().getFullYear();
     const prefix = `LLR${year}${stateCode}`
@@ -17,6 +16,7 @@ const generateLLRNumber = async (stateCode) => {
     
     return `${prefix}${serialPart}`
 }
+
 
 //! Apply-LLR
 router.post('/apply-llr', async (req, res) => {
@@ -58,6 +58,7 @@ router.post('/apply-llr', async (req, res) => {
 })
 
 
+
 //! fetching user_id and returning required fields
 router.get('/apply-dl-renewal', async (req, res) => {
     const { user_id } = req.query;  
@@ -78,12 +79,65 @@ router.get('/apply-dl-renewal', async (req, res) => {
 
     // console.log('LLR Results:', llrResults[0]);
     // console.log('User Results:', userResults[0]);
-    
+
     res.json({
         llr: llrResults[0],
         user: userResults[0]
     })
 });
+
+//! Generating DL number for requested user and storing in DB
+const generateDLNumber = async (stateCode,year) => {
+    // const year = new Date().getFullYear();
+    const prefix = `DL${year}${stateCode}`;
+
+    const serial = Math.floor(Math.random() * 900000) + 1000; // Generates a 4-digit random number
+    const serialPart = String(serial).padStart(6, '0');
+    
+    return `${prefix}${serialPart}`;
+}
+
+// generateDLNumber('KA',2024).then(dlNumber => console.log(dlNumber));
+
+router.post('/apply-dl-renewal', async (req, res) => {
+    try {
+        const {llr_no, name, phone_no, dob, address, valid_from, valid_to, variants, street,city,state,pin_code} = req.body;
+        const year = new Date(valid_from).getFullYear();
+        const stateCode = state.substring(0,2).toUpperCase()
+        const dl_no = await generateDLNumber(stateCode,year);
+        // console.log(dl_no);
+        
+        const [response] = await db.query('SELECT user_id FROM llr WHERE llr_no = ?',[llr_no])
+        const user_id = response[0].user_id;
+        // console.log(response[0].user_id);
+        const [llr_idResponse] = await db.query('SELECT llr_id FROM llr where llr_no = ?',[llr_no])
+        const llr_id = llr_idResponse[0].llr_id
+
+        
+        
+        const drivingLicenceInsertQuery = `INSERT INTO driving_license (dl_no, user_id, llr_id, issue_date, expiry_date, variants, amount, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        await db.query(drivingLicenceInsertQuery ,[
+            dl_no, user_id, llr_id,
+            valid_from, valid_to,
+            variants, 450 , 'pending'
+        ]);
+
+        const dlRenewalInsertQuery = `
+            INSERT INTO dl_renewal (dl_no, name, phone_no, dob, valid_from, valid_to, amount, status, user_id, street, city, state, pin_code)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        await db.query(dlRenewalInsertQuery, [
+            dl_no, name, phone_no, dob,
+            valid_from, valid_to, 450 , 'pending', user_id,
+            street,city,state,pin_code
+        ]);
+
+        res.status(201).json({ message: 'DL Renewal Applied Successfully', dl_no });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server Error' });
+    }
+})
 
 
 module.exports = router;
