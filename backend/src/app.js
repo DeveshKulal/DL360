@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const db = require('./config/db'); // ✅ Import your MySQL pool (update path if needed)
+const db = require('./config/db'); 
 
 //! Routes
 const authRoutes = require('./routes/authRoutes');
@@ -30,15 +30,15 @@ app.use('/api/admin', adminRoutes);
 (async () => {
   try {
     const connection = await db.getConnection();
-    console.log('✅ DB connected successfully!');
+    console.log('DB connected successfully!');
     connection.release();
   } catch (err) {
-    console.error('❌ DB connection failed:', err.message);
+    console.error('DB connection failed:', err.message);
   }
 })();
 
 // ! Server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}...`);
+  console.log(`Server is running on port ${PORT}...`);
 });
