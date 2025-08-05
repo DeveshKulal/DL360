@@ -14,7 +14,10 @@ const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 
 //! Middleware
-app.use(cors());
+app.use(cors({
+  origin: ["https://dl-360.vercel.app", "http://localhost:3000"],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
