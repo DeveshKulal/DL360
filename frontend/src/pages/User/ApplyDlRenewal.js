@@ -21,6 +21,8 @@ export default function ApplyDlRenewal() {
     variant: "",
   });
 
+  const [message, setMessage] = useState()
+
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userSession"));
     const userId = userData?.user?.id;
@@ -55,9 +57,27 @@ export default function ApplyDlRenewal() {
     fetchData(userId);
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const response = await axios.post('http://localhost:3003/api/user/apply-dl-renewal',formData);
+      setFormData({
+        llr_no: "",
+        fullName: "",
+        phoneNumber: "",
+        dob: "",
+        address: "",
+        valid_from : "",
+        valid_to : "",
+        variant: "",
+      })
+    } catch (error) {
+      if(error.response && error.response.data.message){
+        setMessage(error.response.data.message)
+      }else{
+        setMessage("An error occured during registration.")
+      }
+    }
   }
 
   return (
@@ -80,7 +100,7 @@ export default function ApplyDlRenewal() {
               <input
                 type="text"
                 placeholder="Enter your LLR number"
-                className="input input-bordered w-full pl-10"
+                className="input input-bordered w-full pl-10 text-gray-400"
                 value={formData.llr_no}
                 readOnly
               />
@@ -97,7 +117,7 @@ export default function ApplyDlRenewal() {
               <input
                 type="text"
                 placeholder="Enter your full name"
-                className="input input-bordered w-full pl-10"
+                className="input input-bordered w-full pl-10 text-gray-400"
                 value={formData.fullName}
                 readOnly
               />
@@ -114,7 +134,7 @@ export default function ApplyDlRenewal() {
               <input
                 type="text"
                 placeholder="+91 XXXXX-XXXXX"
-                className="input input-bordered w-full pl-10"
+                className="input input-bordered w-full pl-10 text-gray-400"
                 value={formData.phoneNumber}
                 readOnly
               />
@@ -130,7 +150,7 @@ export default function ApplyDlRenewal() {
             <div className="relative">
               <input
                 type="date"
-                className="input input-bordered w-full pl-10"
+                className="input input-bordered w-full pl-10 text-gray-400"
                 value={
                   formData.dob
                     ? new Date(formData.dob).toISOString().split('T')[0]
@@ -149,7 +169,7 @@ export default function ApplyDlRenewal() {
             </label>
             <div className="relative">
               <textarea
-                className="textarea textarea-bordered w-full pl-10"
+                className="textarea textarea-bordered w-full pl-10 text-gray-400"
                 placeholder="Enter your complete address"
                 value={formData.address}
                 readOnly
@@ -183,6 +203,7 @@ export default function ApplyDlRenewal() {
                   className="input input-bordered w-full pl-10"
                   value={formData.valid_to || ""}
                   onChange={(e) => setFormData({...formData, valid_to:e.target.value})}
+                  readOnly
                 />
                 <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               </div>
@@ -237,7 +258,8 @@ export default function ApplyDlRenewal() {
               readOnly
             />
           </div>
-
+          
+          {message}
 
           {/* Submit Button */}
           <button className="btn btn-success w-full text-white" type="submit">

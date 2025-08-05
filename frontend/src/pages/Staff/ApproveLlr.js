@@ -3,55 +3,48 @@ import { useEffect,useState } from "react";
 
 
 export default function ApproveLLRApplications() {
-  const [applications, setApplications] = useState(
-    [{
-        id: "",
-        name: "",
-        llr_no: "",
-        llr_issue_date: "",
-        status:""
-    }]
-    // [
-    // {
-    //   id: 1,
-    //   name: "John Anderson",
-    //   llr_no: "LLR2024001",
-    //   llr_issue_date: "Jan 15, 2024",
-    //   status: "Pending",
-    // },
-   
-    );
-    useEffect(() => {
-        const fetchData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:3003/api/staff/llr-requests`);
-            console.log('Page loaded');
-            console.log(response.data);
-            
-            // Set the actual data received from backend
-            setApplications(response.data); 
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-        };
-        fetchData();
-    }, []);
+  const [applications, setApplications] = useState([{
+    id: "",
+    name: "",
+    llr_no: "",
+    llr_issue_date: "",
+    status:""    
+  }]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3003/api/staff/llr-requests`);
+        // Set the actual data received from backend
+        setApplications(response.data); 
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const handleApprove = (id) => {
-    setApplications((prev) =>
-      prev.map((app) =>
-        app.id === id ? { ...app, status: "Approved" } : app
-      )
-    );
+
+  const updateStatus = async (llr_no, status) => {
+    try {
+      const response = await axios.put(`http://localhost:3003/api/staff/update-status-llr/${llr_no}`, { llr_no, status });
+
+      if (response.status === 200) {
+        setApplications((prev) =>
+          prev.map((app) =>
+            app.llr_no === llr_no ? { ...app, status } : app
+          )
+        );
+      } else {
+        console.error(`Failed to update application status to ${status}`);
+      }
+    } catch (error) {
+      console.error(`Error updating application status to ${status}:`, error);
+    }
   };
 
-  const handleReject = (id) => {
-    setApplications((prev) =>
-      prev.map((app) =>
-        app.id === id ? { ...app, status: "Rejected" } : app
-      )
-    );
-  };
+  const handleApprove = (llr_no) => updateStatus(llr_no, 'approved');
+  const handleReject = (llr_no) => updateStatus(llr_no, 'rejected');
+
 
   const getStatusStyle = (status) => {
     switch (status) {
@@ -98,19 +91,20 @@ export default function ApproveLLRApplications() {
                       className={`py-1 px-3 rounded-full text-sm font-semibold ${getStatusStyle(app.status)}`}
                     >
                       {app.status}
+                      
                     </span>
                   </td>
                   <td className="py-4 px-6">
                     {app.status === "pending" ? (
                       <div className="flex gap-2">
                         <button
-                          onClick={() => handleApprove(app.id)}
+                          onClick={() => handleApprove(app.llr_no)}
                           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-md text-sm"
                         >
                           Approve
                         </button>
                         <button
-                          onClick={() => handleReject(app.id)}
+                          onClick={() => handleReject(app.llr_no)}
                           className="border border-red-600 text-red-600 hover:bg-red-50 px-4 py-1 rounded-md text-sm"
                         >
                           Reject

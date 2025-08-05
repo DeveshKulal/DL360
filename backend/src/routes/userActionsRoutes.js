@@ -139,5 +139,47 @@ router.post('/apply-dl-renewal', async (req, res) => {
     }
 })
 
+router.get("/get-emission-test/:userId", async (req, res) => {
+    const userId = Number(req.params.userId);  
+    try {
+      const [rows] = await db.query(
+        `
+            SELECT et.* 
+            FROM Emission_Test et
+            JOIN Vehicles v ON et.Vehicle_no = v.vehicle_number
+            WHERE v.owner_id = ?
+        `,
+        [userId]);
+      res.json(rows[0]);
+    } catch (err) {
+      console.error("Error fetching emission test:", err);
+      res.status(500).json({ error: "Failed to fetch emission test" });
+    }
+  });
 
+
+// GET driving license by user ID
+router.get('/driving-license/:userId', async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    try {
+        const [result] = await db.execute(
+            `SELECT 
+               u.name, u.email, u.gender, u.street, u.city, u.state, u.pin_code,
+               dl.dl_no, dl.issue_date, dl.expiry_date
+             FROM driving_license dl
+             JOIN users u ON u.user_id = dl.user_id
+             WHERE dl.user_id = ?`,
+            [userId]
+          );
+
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Driving License not found" });
+      }
+  
+      res.json(result[0]);
+    } catch (err) {
+      console.error('DB error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 module.exports = router;

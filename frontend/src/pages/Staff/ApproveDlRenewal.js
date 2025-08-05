@@ -10,16 +10,13 @@ export default function ApproveDLRenewal() {
       valid_to: "",
       valid_from: "",
       status: "",
-    },
-    
+    }, 
   ]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:3003/api/staff/dl-requests`);
-        console.log('Page loaded');
-        console.log(response.data);
       
 
         const formattedData = response.data.map(req => ({
@@ -36,21 +33,27 @@ export default function ApproveDLRenewal() {
   }, []);
 
   
-  const handleApprove = (id) => {
-    setRequests((prev) =>
-      prev.map((req) =>
-        req.id === id ? { ...req, status: "approved" } : req
-      )
-    );
+  const updateStatus = async (dl_no, status) => {
+    try {
+      const response = await axios.put(`http://localhost:3003/api/staff/update-status-dl/${dl_no}`, { dl_no, status });
+
+      if (response.status === 200) {
+        setRequests((prev) =>
+          prev.map((req) =>
+            req.dl_no === dl_no ? { ...req, status } : req
+          )
+        );
+      } else {
+        console.error(`Failed to update application status to ${status}`);
+      }
+    } catch (error) {
+      console.error(`Error updating application status to ${status}:`, error);
+    }
   };
 
-  const handleReject = (id) => {
-    setRequests((prev) =>
-      prev.map((req) =>
-        req.id === id ? { ...req, status: "rejected" } : req
-      )
-    );
-  };
+  const handleApprove = (dl_no) => updateStatus(dl_no, 'approved');
+  const handleReject = (dl_no) => updateStatus(dl_no, 'rejected');
+
 
   const getBadgeStyle = (status) => {
     switch (status) {
@@ -108,21 +111,20 @@ export default function ApproveDLRenewal() {
                         request.status
                       )}`}
                     >
-                      {request.status.charAt(0).toUpperCase() +
-                        request.status.slice(1)}
+                      {request.status}
                     </span>
                   </td>
                   <td className="py-4 px-6">
                     {request.status === "pending" ? (
                       <div className="flex gap-2">
                         <button
-                          onClick={() => handleApprove(request.id)}
+                          onClick={() => handleApprove(request.dl_no)}
                           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-md text-sm"
                         >
                           Approve
                         </button>
                         <button
-                          onClick={() => handleReject(request.id)}
+                          onClick={() => handleReject(request.dl_no)}
                           className="border border-red-600 text-red-600 hover:bg-red-50 px-4 py-1 rounded-md text-sm"
                         >
                           Reject

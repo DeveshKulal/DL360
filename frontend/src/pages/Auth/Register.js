@@ -9,7 +9,7 @@ function Register() {
     name:'',
     email:'',
     password:'',
-    role:''
+    // role:'User'
   })
   const [message, setMessage] = useState('')
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (!formData.name || !formData.email || !formData.password || !formData.role) {
+      if (!formData.name || !formData.email || !formData.password ) {
         setMessage("Please fill in all fields.");
         return;
       }
@@ -103,7 +103,7 @@ function Register() {
                 </label>
 
                 {/* Role Selection */}
-                <label className="input bg-white flex items-center gap-2 w-full border rounded px-3 py-2">
+                {/* <label className="input bg-white flex items-center gap-2 w-full border rounded px-3 py-2">
                   <UserRound className="size-4 text-blue-700" />
                   <select 
                     className="grow bg-white outline-none text-sm"
@@ -116,7 +116,7 @@ function Register() {
                     <option value='Staff'>Staff</option>
                     <option value='User'>User</option>
                   </select>
-                </label>
+                </label> */}
                 {message && <div className='text-sm text-red-600 font-medium'>{message}</div>}
 
                 {/* Register Button */}

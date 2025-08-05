@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Eye, EyeClosed, LockIcon, Mail, UserRound } from 'lucide-react'
+import { Eye, EyeClosed, LockIcon, Mail } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ function Login() {
   const [formData, setFormData] = useState({
     email:'',
     password:'',
-    role:''
+    // role:'User'
   })
   const [error , setError] = useState("");
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      if (!formData.email || !formData.password || !formData.role) {
+      if (!formData.email || !formData.password ) {
         setError("Please fill in all fields.");
         return;
       }
@@ -50,7 +50,7 @@ function Login() {
       setFormData({
         email:'',
         password:'',
-        role:''
+        // role:''
       })
       setError('')
     } catch (error) {
@@ -103,7 +103,7 @@ function Login() {
                 </label>
 
                 {/* Role Selection */}
-                <label className="input bg-white flex items-center gap-2 w-full border rounded px-3 py-2">
+                {/* <label className="input bg-white flex items-center gap-2 w-full border rounded px-3 py-2">
                   <UserRound className="size-4 text-blue-700" />
                     <select
                       className="grow bg-white outline-none text-sm"
@@ -116,18 +116,18 @@ function Login() {
                       <option value="Staff">Staff</option>
                       <option value="User">User</option>
                     </select>
-                  </label>
-                  {error && <div className='text-sm text-red-600 font-medium'>{error}</div>}
+                </label> */}
+                {error && <div className='text-sm text-red-600 font-medium'>{error}</div>}
 
-                  {/* Login Button */}
-                  <button
-                    className="btn btn-primary w-full py-2 text-sm sm:text-base"
-                    type='submit'
-                  >
-                    Login
-                  </button>
-              </div>
+                {/* Login Button */}
+                <button
+                  className="btn btn-primary w-full py-2 text-sm sm:text-base"
+                  type='submit'
+                >
+                  Login
+                </button>
             </div>
+          </div>
 
             <div className='flex justify-center items-center pt-6 text-sm'>
               <p>Don't have an account? <Link to={'/register'} className='text-blue-700'>Register</Link> here!</p>

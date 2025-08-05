@@ -4,14 +4,14 @@ const db = require('../config/db');
 
 // ! REGISTER 
 router.post('/register', async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
     try {
         const [existing] = await db.query('SELECT * FROM users WHERE email=?', [email]);
         if (existing.length > 0) {
             return res.status(400).json({ message: 'Email already exists' });
         }
 
-        await db.query('INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)', [name, email, password, role]);
+        await db.query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password]);
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
