@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const db = require('./db'); // ✅ Import your MySQL pool (update path if needed)
+const db = require('./config/db'); // ✅ Import your MySQL pool (update path if needed)
 
 //! Routes
 const authRoutes = require('./routes/authRoutes');
