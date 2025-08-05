@@ -9,6 +9,8 @@ import {
   Mail
 } from 'lucide-react';
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 const UserDashboardContent = () => {
   const [dlData, setDlData] = useState(null);
 
@@ -18,7 +20,7 @@ const UserDashboardContent = () => {
         const userData = JSON.parse(localStorage.getItem("userSession"));
         const userId = userData?.user?.id;
 
-        const res = await axios.get(`http://localhost:3003/api/user/driving-license/${userId}`);
+        const res = await axios.get(`${API}/api/user/driving-license/${userId}`);
         setDlData(res.data);
       } catch (err) {
         console.error('Error fetching DL:', err);

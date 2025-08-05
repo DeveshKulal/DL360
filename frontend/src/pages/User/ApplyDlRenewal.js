@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 export default function ApplyDlRenewal() {
   const [formData, setFormData] = useState({
     llr_no: "",
@@ -30,7 +32,7 @@ export default function ApplyDlRenewal() {
     const fetchData = async (userId) => {
       try {
         if (userId) {
-          const response = await axios.get("http://localhost:3003/api/user/apply-dl-renewal", {
+          const response = await axios.get(`${API}/api/user/apply-dl-renewal`, {
             params: { user_id: userId },
           });
 
@@ -60,7 +62,7 @@ export default function ApplyDlRenewal() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const response = await axios.post('http://localhost:3003/api/user/apply-dl-renewal',formData);
+      const response = await axios.post(`${API}/api/user/apply-dl-renewal`,formData);
       setFormData({
         llr_no: "",
         fullName: "",

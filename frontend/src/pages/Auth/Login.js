@@ -3,6 +3,8 @@ import { Eye, EyeClosed, LockIcon, Mail } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,7 +31,7 @@ function Login() {
         return;
       }
 
-      const response = await axios.post(`http://localhost:3003/api/auth/login`,formData);      
+      const response = await axios.post(`${API}/api/auth/login`,formData);      
       const {role} = response.data.user
 
       // console.log("Login Response:", response.data);

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 export default function LostVehicleForm() {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
@@ -53,7 +55,7 @@ export default function LostVehicleForm() {
   useEffect(() => {
     const fetchFirNo = async () => {
       try {
-        const response = await axios.get('http://localhost:3003/api/staff/get-fir-no');
+        const response = await axios.get(`${API}/api/staff/get-fir-no`);
         // console.log(response);
         
         const generatedFirNo = response.data.fir_no;
@@ -77,7 +79,7 @@ export default function LostVehicleForm() {
   
     if (validateForm()) {
       // Proceed with form submission (e.g., API call)
-      const response = axios.post(`http://localhost:3003/api/staff/add-fir`,formData)
+      const response = axios.post(`${API}/api/staff/add-fir`,formData)
       setFormData({
         fir_no: "",
         vehicle_number: "",

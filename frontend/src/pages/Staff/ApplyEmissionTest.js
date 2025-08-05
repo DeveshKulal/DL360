@@ -2,6 +2,8 @@ import axios from 'axios';
 import { Info } from 'lucide-react';
 import { useState } from 'react';
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 export default function ApplyEmissionTest() {
   const [formData, setFormData] = useState({
     Vehicle_no:"",
@@ -28,7 +30,7 @@ export default function ApplyEmissionTest() {
       }
   
       const response = await axios.post(
-        'http://localhost:3003/api/staff/apply-emission-test',
+        `${API}/api/staff/apply-emission-test`,
         formData
       );  
   

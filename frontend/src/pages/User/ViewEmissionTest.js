@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { CheckCircle, AlertTriangle, Info } from "lucide-react";
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 export default function ViewEmissionTest() {
   const [message, setMessage] = useState("");
   const [validUntil, setValidUntil] = useState(null);
@@ -13,7 +15,7 @@ export default function ViewEmissionTest() {
         const userData = JSON.parse(localStorage.getItem("userSession"));
         const userId = userData?.user?.id;      
 
-        const response = await axios.get(`http://localhost:3003/api/user/get-emission-test/${userId}`);
+        const response = await axios.get(`${API}/api/user/get-emission-test/${userId}`);
         const latestTest = response.data;
 
         if (!latestTest || !latestTest.date) {

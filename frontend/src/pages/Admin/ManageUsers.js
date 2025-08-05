@@ -3,6 +3,8 @@ import { Pencil, Trash2, } from 'lucide-react';
 import axios from 'axios';
 import { useEffect } from 'react';
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 export default function ManageUsers() {
 
   const [users, setUsers] = useState([{
@@ -20,7 +22,7 @@ export default function ManageUsers() {
     const fetchData = async () => {
       try {
 
-        const response = await axios.get(`http://localhost:3003/api/admin/get-users`);
+        const response = await axios.get(`${API}/api/admin/get-users`);
         // console.log(response);
         
         setUsers(response.data); 

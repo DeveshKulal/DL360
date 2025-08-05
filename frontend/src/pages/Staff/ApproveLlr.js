@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect,useState } from "react";
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
 
 export default function ApproveLLRApplications() {
   const [applications, setApplications] = useState([{
@@ -13,7 +14,7 @@ export default function ApproveLLRApplications() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3003/api/staff/llr-requests`);
+        const response = await axios.get(`${API}/api/staff/llr-requests`);
         // Set the actual data received from backend
         setApplications(response.data); 
       } catch (error) {
@@ -26,7 +27,7 @@ export default function ApproveLLRApplications() {
 
   const updateStatus = async (llr_no, status) => {
     try {
-      const response = await axios.put(`http://localhost:3003/api/staff/update-status-llr/${llr_no}`, { llr_no, status });
+      const response = await axios.put(`${API}/api/staff/update-status-llr/${llr_no}`, { llr_no, status });
 
       if (response.status === 200) {
         setApplications((prev) =>

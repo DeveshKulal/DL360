@@ -4,6 +4,8 @@ import { Check, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 const getStatusStyle = (status) => {
   switch (status) {
     case "Pending":
@@ -47,7 +49,7 @@ export default function ViewComplaints() {
     const fetchData = async () => {
       try {
   
-        const response = await axios.get(`http://localhost:3003/api/admin/get-complaints`);
+        const response = await axios.get(`${API}/api/admin/get-complaints`);
         // console.log(response);
         
         setComplaints(response.data); 

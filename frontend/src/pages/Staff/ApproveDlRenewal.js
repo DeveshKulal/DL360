@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import axios from "axios";
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 export default function ApproveDLRenewal() {
   const [requests, setRequests] = useState([
     {
@@ -16,7 +18,7 @@ export default function ApproveDLRenewal() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3003/api/staff/dl-requests`);
+        const response = await axios.get(`${API}/api/staff/dl-requests`);
       
 
         const formattedData = response.data.map(req => ({
@@ -35,7 +37,7 @@ export default function ApproveDLRenewal() {
   
   const updateStatus = async (dl_no, status) => {
     try {
-      const response = await axios.put(`http://localhost:3003/api/staff/update-status-dl/${dl_no}`, { dl_no, status });
+      const response = await axios.put(`${API}/api/staff/update-status-dl/${dl_no}`, { dl_no, status });
 
       if (response.status === 200) {
         setRequests((prev) =>

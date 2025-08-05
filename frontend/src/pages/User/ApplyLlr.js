@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 export default function ApplyLlr() {
 
   const [llrform, setLlrForm] = useState({
@@ -37,7 +39,7 @@ export default function ApplyLlr() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const response = await axios.post('http://localhost:3003/api/user/apply-llr',llrform);
+      const response = await axios.post(`${API}/api/user/apply-llr`,llrform);
       setLlrForm({
         name:'',
         email:'',

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Pencil, Trash2,  } from "lucide-react";
 import axios from "axios";
+
+const API = process.env.REACT_APP_API_URL || "http://localhost:3003";
+
 const initialVehicles = [
   { id: '', number: "", owner: "", type: "", color:'', rfid_tag : '', emission: "" },
 ];
@@ -14,7 +17,7 @@ export default function ManageVehicles() {
     const fetchData = async () => {
       try {
 
-        const response = await axios.get(`http://localhost:3003/api/admin/get-vehicles`);
+        const response = await axios.get(`${API}/api/admin/get-vehicles`);
         // console.log(response);
         
         setVehicles(response.data); 
