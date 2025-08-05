@@ -144,7 +144,7 @@ router.get("/get-emission-test/:userId", async (req, res) => {
     try {
       const [rows] = await db.query(
         `
-            SELECT et.* 
+            SELECT * 
             FROM Emission_Test et
             JOIN Vehicles v ON et.Vehicle_no = v.vehicle_number
             WHERE v.owner_id = ?
