@@ -27,7 +27,7 @@ app.use('/api/staff',staffRoutes)
 app.use('/api/admin',adminRoutes)
 
 // ! Server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server is runing on port ${PORT}...`);
 })
