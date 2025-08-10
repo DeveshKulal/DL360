@@ -234,6 +234,7 @@ export default function Home() {
                   <MapPin className="w-6 h-6 text-red-500 mt-1" />
                   <div>
                     <h3 className="font-bold text-gray-900 mb-2">Visit Us</h3>
+                    <p className='text-gray-600'>Kateel, Mangalore, Karnataka</p>
                   </div>
                 </div>
               </Abstract3DCard>
@@ -253,7 +254,7 @@ export default function Home() {
                   <Mail className="w-6 h-6 text-red-500 mt-1" />
                   <div>
                     <h3 className="font-bold text-gray-900 mb-2">Email Us</h3>
-                    <p className="text-gray-600">deveshkulal27@.com</p>
+                    <p className="text-gray-600">deveshkulal27@gmail.com</p>
                   </div>
                 </div>
               </Abstract3DCard>

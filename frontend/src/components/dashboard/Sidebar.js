@@ -1,19 +1,42 @@
-import { Lock, Menu } from "lucide-react";
-import { useState } from "react";
+import { Lock, SidebarCloseIcon, SidebarOpenIcon } from "lucide-react";
+import { useState, useEffect } from "react";
 import SidebarItem from "./SidebarItem";
 
-export default function Sidebar({ items = [], colorTheme = {} }) {  
-  const [isOpen,setIsOpen] = useState(true)
-
-  const [activeIndex,setActiveIndex] = useState( () => {
-    const storedIndex = localStorage.getItem('sidebar-active-index');
-    return storedIndex ? parseInt(storedIndex,10) : 0;
+export default function Sidebar({ items = [], colorTheme = {} }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const storedIndex = localStorage.getItem("sidebar-active-index");
+    return storedIndex ? parseInt(storedIndex, 10) : 0;
   });
+
+  // Handle responsiveness & body scroll lock
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsOpen(true); // Always open on desktop
+        document.body.style.overflow = ""; // Unlock scroll
+      } else {
+        setIsOpen(false); // Closed by default on mobile
+        document.body.style.overflow = ""; // Unlock scroll
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Lock body scroll when drawer open on mobile
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    }
+  }, [isOpen]);
 
   const handleClick = (index) => {
     setActiveIndex(index);
-    localStorage.setItem('sidebar-active-index',index.toString())
-  }
+    localStorage.setItem("sidebar-active-index", index.toString());
+  };
 
   // Default color theme fallback
   const activeColor = {
@@ -23,40 +46,64 @@ export default function Sidebar({ items = [], colorTheme = {} }) {
 
   return (
     <>
-      {/* Toggle button for small screens */}
-      <button
-        className="md:hidden p-3 focus:outline-none"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Menu className="w-6 h-6 text-gray-700" />
-      </button>
-
+      {/* Toggle button for mobile */}
+      {
+        isOpen? 
+        <button
+          className=" flex md:hidden px-2 focus:outline-none z-50 fixed top-4 left-4  space-x-20"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <div
+            className={`text-xl font-bold px-6 `}
+          >
+            DL360
+          </div>
+          <SidebarCloseIcon className="w-6 h-6 text-gray-700" />
+        </button>
+        :
+        <button
+          className="md:hidden pt-1 px-2 focus:outline-none z-50 fixed top-4 left-4 "
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <SidebarOpenIcon className="w-6 h-6 text-gray-700" />
+        </button>
+      }
+      {/* Sidebar */}
       <aside
-        className={`h-screen bg-white shadow-sm border-r flex flex-col transition-all duration-300 z-50 
-        fixed md:static top-0 left-0 
-        ${isOpen ? "w-64" : "w-0  overflow-hidden"}
-        md:w-64
+        className={`
+          h-screen bg-white shadow-sm border-r flex flex-col
+          fixed md:static top-0 left-0 z-40
+          transition-[width] duration-300 ease-in-out
+          ${isOpen ? "w-64" : "w-0 md:w-64"}
         `}
       >
-        <div className="text-2xl font-bold px-6 py-4 border-b bg-white">
-          DL360
+        <div className="pt-14">
+          {/* Nav Items */}
+          <nav
+            className={`flex-1 flex flex-col gap-2 p-4 
+              ${isOpen || window.innerWidth >= 768 ? "opacity-100" : "opacity-0"} 
+              transition-opacity duration-300`}
+          >
+            {items.map((item, index) => (
+              <SidebarItem
+                key={item.label}
+                icon={item.icon}
+                label={item.label}
+                active={index === activeIndex}
+                activeColor={activeColor}
+                onClick={() => handleClick(index)}
+                path={item.path}
+              />
+            ))}
+          </nav>
         </div>
 
-        <nav className="flex-1 flex flex-col gap-2 p-4">
-          {items.map((item, index) => (
-            <SidebarItem
-              key={item.label}
-              icon={item.icon}
-              label={item.label}
-              active={index === activeIndex}
-              activeColor={activeColor}
-              onClick={() => handleClick(index)}
-              path={item.path}
-            />
-          ))}
-        </nav>
-
-        <div className="p-4">
+        {/* Footer Button */}
+        <div
+          className={`p-4 
+            ${isOpen || window.innerWidth >= 768 ? "opacity-100" : "opacity-0"} 
+            transition-opacity duration-300`}
+        >
           <div
             className={`${
               colorTheme.btnBg || "bg-red-600"
