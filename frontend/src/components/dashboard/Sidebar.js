@@ -1,5 +1,6 @@
-import { Lock, SidebarCloseIcon, SidebarOpenIcon } from "lucide-react";
+import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
 
 export default function Sidebar({ items = [], colorTheme = {} }) {
@@ -37,6 +38,14 @@ export default function Sidebar({ items = [], colorTheme = {} }) {
     setActiveIndex(index);
     localStorage.setItem("sidebar-active-index", index.toString());
   };
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    sessionStorage.clear();
+    navigate("/login");
+  };
+
 
   // Default color theme fallback
   const activeColor = {
@@ -104,14 +113,15 @@ export default function Sidebar({ items = [], colorTheme = {} }) {
             ${isOpen || window.innerWidth >= 768 ? "opacity-100" : "opacity-0"} 
             transition-opacity duration-300`}
         >
-          <div
-            className={`${
-              colorTheme.btnBg || "bg-red-600"
-            } text-white flex items-center gap-3 px-6 py-3 cursor-pointer rounded-md font-semibold`}
+          <button
+            onClick={handleLogout}
+            className={`${colorTheme?.btnBg || "bg-red-600"} 
+            text-white flex items-center gap-3 px-6 py-3 
+            rounded-md font-semibold w-full`}
           >
-            <Lock className="w-5 h-5" />
-            <span className="whitespace-nowrap">Change Password</span>
-          </div>
+            <LogOutIcon className="w-5 h-5" />
+            <span className="whitespace-nowrap">Logout</span>
+          </button>
         </div>
       </aside>
     </>
