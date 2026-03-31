@@ -80,6 +80,7 @@ export default function LostVehicleForm() {
     if (validateForm()) {
       // Proceed with form submission (e.g., API call)
       const response = axios.post(`${API}/api/staff/add-fir`,formData)
+      console.log(response.data); 
       setFormData({
         fir_no: "",
         vehicle_number: "",

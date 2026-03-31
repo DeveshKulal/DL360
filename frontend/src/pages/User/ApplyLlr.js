@@ -40,6 +40,7 @@ export default function ApplyLlr() {
     try {
       e.preventDefault();
       const response = await axios.post(`${API}/api/user/apply-llr`,llrform);
+      console.log(response.data); 
       setLlrForm({
         name:'',
         email:'',

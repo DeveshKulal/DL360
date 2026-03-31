@@ -63,6 +63,7 @@ export default function ApplyDlRenewal() {
     try {
       e.preventDefault();
       const response = await axios.post(`${API}/api/user/apply-dl-renewal`,formData);
+      console.log(response.data); 
       setFormData({
         llr_no: "",
         fullName: "",
