@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { EyeClosed,Eye, LockIcon, Mail, UserRound, User } from 'lucide-react'
+import { EyeClosed,Eye, LockIcon, Mail, User } from 'lucide-react'
 import { Link ,useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
